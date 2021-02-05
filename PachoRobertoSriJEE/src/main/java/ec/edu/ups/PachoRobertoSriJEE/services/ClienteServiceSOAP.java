@@ -1,22 +1,23 @@
 package ec.edu.ups.PachoRobertoSriJEE.services;
 
+
+
 import javax.inject.Inject;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 import ec.edu.ups.PachoRobertoSriJEE.ON.Aleatorio;
 
-
-@Path("SRI")
-public class ClienteServiceREST {
+@WebService
+public class ClienteServiceSOAP {
 	
 	@Inject
 	private Aleatorio aleatorio;
 	
-	@POST
-	public String guardar() throws Exception {
-		
+	@WebMethod
+	public String saludar() {
 		return aleatorio.claveAleatoria();
 	}
+	
 	
 }
 

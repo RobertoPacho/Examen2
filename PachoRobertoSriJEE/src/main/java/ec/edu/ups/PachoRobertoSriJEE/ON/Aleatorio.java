@@ -20,9 +20,9 @@ public class Aleatorio {
 	}
 	
 	public String claveAleatoria() {
+		String clave="Solicitud no aprobada";
 		if(aprobar()) {
 		// La variable palabra almacena el resultado final
-		String palabra = "";
 		// La variable caracteres es un número aleatorio entre 2 y 20 que define la
 		// longitud de la palabra.
 		int caracteres = (int) (Math.random() * 20) + 2;
@@ -38,10 +38,10 @@ public class Aleatorio {
 			// devuelve el máximo entero.
 			int codigoAscii = (int) Math.floor(Math.random() * (122 - 97) + 97);
 			// para pasar el código a carácter basta con hacer un cast a char
-			palabra = palabra + (char) codigoAscii;
+			clave = clave + (char) codigoAscii;
 		}
-		return palabra;
+		return clave;
 	}
-		return null;
+		return clave;
 	}
 }
