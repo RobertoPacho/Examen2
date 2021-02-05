@@ -1,0 +1,244 @@
+package ec.edu.ups.PachoRobertoCajeroJEE.Beans;
+
+import java.util.ArrayList;
+
+import java.util.Date;
+import java.util.List;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import ec.edu.ups.PachoRobertoCajeroJEE.ON.CuentaON;
+import ec.edu.ups.PachoRobertoCajeroJEE.modelo.Cuenta;
+
+
+
+@Named
+@RequestScoped
+public class AperturaCuentaBEAN {
+
+	@Inject
+	private CuentaON cuentaON;
+
+	@Inject
+	private Cuenta cuenta;
+
+
+	private Integer id;
+	private String tipoCuenta;
+	private int numerocuenta;
+	private double saldo;
+	private String cedula;
+	private String nombres;
+	private String apellido;
+	private String direccion;
+	private String correo;
+	private String telefono;
+	private String celular;
+	private String usuario;
+	private String contrasena;
+	private Date fechaapertura;
+
+	int c = 1;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public double getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
+	}
+
+	public String getTipoCuenta() {
+		return tipoCuenta;
+	}
+
+	public void setTipoCuenta(String tipoCuenta) {
+		this.tipoCuenta = tipoCuenta;
+	}
+
+	public int getNumerocuenta() {
+		return numerocuenta;
+	}
+
+	public void setNumerocuenta(int numerocuenta) {
+		this.numerocuenta = numerocuenta;
+	}
+
+	public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+
+	public String getNombres() {
+		return nombres;
+	}
+
+	public void setNombres(String nombres) {
+		this.nombres = nombres;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public String getCelular() {
+		return celular;
+	}
+
+	public void setCelular(String celular) {
+		this.celular = celular;
+	}
+
+	public String getContrasena() {
+		return contrasena;
+	}
+
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
+	}
+
+	public Date getFechaapertura() {
+		return fechaapertura;
+	}
+
+	public void setFechaapertura(Date fechaapertura) {
+		this.fechaapertura = fechaapertura;
+	}
+
+	public CuentaON getCuentaON() {
+		return cuentaON;
+	}
+
+	public void setCuentaON(CuentaON cuentaON) {
+		this.cuentaON = cuentaON;
+	}
+
+	public Cuenta getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
+	}
+	/**
+	 * @return the usuario
+	 */
+	public String getUsuario() {
+		return usuario;
+	}
+
+	/**
+	 * @param usuario the usuario to set
+	 */
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+
+	public List<Cuenta> listaCuentas() throws Exception {
+		return cuentaON.listaCuentas();
+	}
+
+	public List<String> tipos() {
+		List<String> rol = new ArrayList<String>();
+		rol.add("cuenta corriente");
+		rol.add("cuenta de ahorros");
+		return rol;
+	}
+
+	// ation controler
+	public String doAgregarCuenta() throws Exception {
+
+		Date objDate = new Date();
+		String clave = doClave();
+
+		int idNext = cuentaON.listaCuentas().size() + 1;
+		cuenta.setId(idNext);
+		cuenta.setTipoCuenta(tipoCuenta);
+		cuenta.setNumerocuenta(String.valueOf(doAleatorio()));
+		cuenta.setCedula(cedula);
+		cuenta.setNombres(nombres);
+		cuenta.setApellido(apellido);
+		cuenta.setDireccion(direccion);
+		cuenta.setCorreo(correo);
+		cuenta.setTelefono(telefono);
+		cuenta.setCelular(celular);
+		cuenta.setUsuario(cedula);
+		cuenta.setContrasena(clave);
+		cuenta.setFechaapertura(objDate);
+
+		cuentaON.insertar(cuenta);
+		return null;
+
+	}
+
+	public String doClave() {
+		return cuentaON.claveAleatoria();
+	}
+
+	public int doAleatorio() {
+		return cuentaON.numeroCuenta();
+	}
+
+	public void reset() {
+		saldo = 0.0;
+		cedula = "";
+		nombres = "";
+		apellido = "";
+		direccion = "";
+		correo = "";
+		telefono = "";
+		celular = "";
+	}
+
+	public String buscarcedula() throws Exception {
+		cuenta = cuentaON.buscarCedula(cedula);
+		nombres = cuenta.getNombres() + " " + cuenta.getApellido();
+		if (nombres.length() == 10) {
+			return nombres;
+		} else {
+			c++;
+		}
+		return nombres;
+	}
+
+}
