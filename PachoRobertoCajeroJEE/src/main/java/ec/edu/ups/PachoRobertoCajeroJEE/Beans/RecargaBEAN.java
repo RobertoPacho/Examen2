@@ -1,0 +1,209 @@
+package ec.edu.ups.PachoRobertoCajeroJEE.Beans;
+
+import java.util.Date;
+
+import java.util.List;
+
+import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import ec.edu.ups.PachoRobertoCajeroJEE.ON.CuentaON;
+import ec.edu.ups.PachoRobertoCajeroJEE.ON.TransaccionesON;
+import ec.edu.ups.PachoRobertoCajeroJEE.modelo.Cuenta;
+import ec.edu.ups.PachoRobertoCajeroJEE.modelo.Transacciones;
+
+@Named
+@RequestScoped
+public class RecargaBEAN {
+
+	@Inject
+	private CuentaON cuentaON;
+
+	@Inject
+	private Cuenta cuenta;
+
+	@Inject
+	private TransaccionesON transaccionesON;
+
+	@Inject
+	private Transacciones transacciones;
+
+	private int id;
+	private String cedula;
+	private String celular;
+	private String nombres;
+	private String numerocuenta;
+	private String tipoCuenta;
+	private double monto;
+	private double saldo;
+
+	private boolean check1;
+
+	public CuentaON getCuentaON() {
+		return cuentaON;
+	}
+
+	public void setCuentaON(CuentaON cuentaON) {
+		this.cuentaON = cuentaON;
+	}
+
+	public String getNumcuenta() {
+		return numerocuenta;
+	}
+
+	public void setNumcuenta(String numcuenta) {
+		this.numerocuenta = numcuenta;
+	}
+
+	public double getMonto() {
+		return monto;
+	}
+
+	public void setMonto(double monto) {
+		this.monto = monto;
+	}
+
+	public String getTipoCuenta() {
+		return tipoCuenta;
+	}
+
+	public void setTipoCuenta(String tipoCuenta) {
+		this.tipoCuenta = tipoCuenta;
+	}
+
+	public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+
+	public String getNombres() {
+		return nombres;
+	}
+
+	public void setNombres(String nombres) {
+		this.nombres = nombres;
+	}
+
+	public boolean isCheck1() {
+		return check1;
+	}
+
+	public void setCheck1(boolean check1) {
+		this.check1 = check1;
+	}
+
+	public String getCelular() {
+		return celular;
+	}
+
+	public void setCelular(String celular) {
+		this.celular = celular;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public double getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
+	}
+
+	public void addMessage() {
+		if (check1) {
+			String summary = check1 ? "Retiro  exitoso" : "Unchecked";
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
+		}
+			}
+
+	// <p:ajax update="msg" listener="#{transaccionesBEAN.addMessage()}"/>
+	// <p:ajax update="msg" listener="#{transaccionesBEAN.addMessage()}"/>
+	public String retiro() throws Exception {
+		Date objDate = new Date();
+		List<Cuenta> listaC = cuentaON.listacuentasCliente2(cedula);
+		if (check1) {// RETIRO
+			if (listaC.size() > 0) {
+				for (int i = 0; i < listaC.size(); i++) {
+					if (listaC.get(i).getTipoCuenta().equals("cuenta de ahorros")) {
+						saldo = transaccionesON.depositos(listaC.get(i).getId()) - transaccionesON.retiros(listaC.get(i).getId());
+						if (saldo > monto) {
+							transacciones.setId(codigotransaccion());
+							transacciones.setCantidad(Double.valueOf(monto));
+							transacciones.setCuenta(cuentaON.buscarid(listaC.get(i).getId()));
+							transacciones.setTipo("Retiro");
+							transacciones.setFecha(objDate);
+							transaccionesON.agregar(transacciones);
+							reset();
+						} else {
+							System.out.println("saldo = " + saldo + " Insuficiente");
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public void reset() throws Exception {
+		cedula = "";
+		nombres = "";
+		monto = 0.0;
+		numerocuenta = "";
+		check1 = false;
+		saldo=0.0;
+	}
+
+	public int codigotransaccion() throws Exception {
+		id = transaccionesON.listaTransacciones().size() + 1;
+		return id;
+	}
+	
+	public double pedirsalto() throws Exception {
+		List<Cuenta> listaC = cuentaON.listacuentasCliente2(cedula);
+		if (listaC.size() > 0) {
+			for (int i = 0; i < listaC.size(); i++) {
+				if (listaC.get(i).getTipoCuenta().equals("cuenta de ahorros")) {
+					saldo=transaccionesON.saldo(listaC.get(i).getId());
+				}
+				
+				}
+		}
+		return saldo;
+	}
+	
+
+	public String cuentam() throws Exception {
+		List<Cuenta> listaC = cuentaON.listacuentasCliente2(cedula);
+		if (listaC.size() > 0) {
+			for (int i = 0; i < listaC.size(); i++) {
+				if (listaC.get(i).getTipoCuenta().equals("cuenta de ahorros"))
+					numerocuenta = listaC.get(i).getNumerocuenta();
+					
+			}
+		}
+		return numerocuenta;
+	}
+
+	// 0107624637
+
+	public String buscarcedula() throws Exception {
+		cuenta = cuentaON.recargar(celular);
+		nombres = cuenta.getNombres() + " " + cuenta.getApellido();
+		cedula =cuenta.getCedula();
+		return nombres;
+	}
+
+}

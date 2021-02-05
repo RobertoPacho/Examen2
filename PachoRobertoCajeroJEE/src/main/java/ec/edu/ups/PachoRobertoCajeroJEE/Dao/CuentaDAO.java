@@ -113,6 +113,29 @@ public class CuentaDAO {
 		return cuenta;
 	}
 
+	public Cuenta buscarCelularrecarga(String celular) throws Exception {
+		String jpql = "Select c from Cuenta c";
+		Query q = em.createQuery(jpql, Cuenta.class);
+		List<Cuenta> lista = q.getResultList();	
+		for(int i=0; i < lista.size(); i++) {
+			if(lista.get(i).getCelular().equals(celular) || lista.get(i).getNumerocuenta().equals(celular) ) {
+				cuenta.setId(lista.get(i).getId());
+				cuenta.setTipoCuenta(lista.get(i).getTipoCuenta());
+				cuenta.setNumerocuenta(lista.get(i).getNumerocuenta());
+				cuenta.setCedula(lista.get(i).getCedula());
+				cuenta.setNombres(lista.get(i).getNombres());
+				cuenta.setApellido(lista.get(i).getApellido());
+				cuenta.setDireccion(lista.get(i).getDireccion());
+				cuenta.setCorreo(lista.get(i).getCorreo());
+				cuenta.setTelefono(lista.get(i).getTelefono());
+				cuenta.setCelular(lista.get(i).getCedula());
+				cuenta.setContrasena(lista.get(i).getContrasena());
+				cuenta.setFechaapertura(lista.get(i).getFechaapertura());
+				return cuenta;
+			}
+		}
+		return cuenta;
+	}
 	/**
 	 * El metodo lista todos los cuenta existentes
 	 * 

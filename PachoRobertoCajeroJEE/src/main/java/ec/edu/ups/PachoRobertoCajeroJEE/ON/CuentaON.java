@@ -33,6 +33,10 @@ public class CuentaON {
 	public Cuenta buscarCedula(String cedula) throws Exception{
 		return cuentaDAO.buscarCedula(cedula);
 	}
+	
+	public Cuenta recargar(String celular) throws Exception{
+		return cuentaDAO.buscarCelularrecarga(celular);
+	}
 
 	public List<Cuenta> listacuentasCliente2(String cedula) throws Exception {
 		return cuentaDAO.listacuentasCliente(cedula);

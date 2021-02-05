@@ -207,6 +207,7 @@ public class AperturaCuentaBEAN {
 		cuenta.setFechaapertura(objDate);
 
 		cuentaON.insertar(cuenta);
+		System.out.println("cuenta creada");
 		return null;
 
 	}

@@ -178,9 +178,9 @@ p {
 
 <div class="datatransacciones">
 	<h:form id="trans" >
-		<h:outputText value="Buscar Cedula: " />
+		<h:outputText value="Buscar Celular/#Cuenta: " />
 		<br />
-		<p:inputText id="cedula" value="#{transaccionesBEAN.cedula}">
+		<p:inputText id="cedula" value="#{recargaBEAN.celular}">
 			<p:ajax event="keyup" update="out1" />
 			<p:ajax event="keyup" update="ncuenta" />
 			<p:ajax event="keyup" update="saldo" />
@@ -189,30 +189,28 @@ p {
 		<br />
 		<h:panelGrid columns="2" cellpadding="5">
 			<h:outputText value="Cliente: " />
-			<h:outputText id="out1" value="#{transaccionesBEAN.buscarcedula()}" style="border: #000000 1px solid;" />
+			<h:outputText id="out1" value="#{recargaBEAN.buscarcedula()}" style="border: #000000 1px solid;" />
 			
 			#Cuenta:
-			<h:outputText id="ncuenta" value="#{transaccionesBEAN.cuentam()}"
+			<h:outputText id="ncuenta" value="#{recargaBEAN.cuentam()}"
 						style="border: #000000 1px solid;" />
 			$Saldo:
-			<h:outputText id="saldo" value="#{transaccionesBEAN.pedirsalto()}"
+			<h:outputText id="saldo" value="#{recargaBEAN.pedirsalto()}"
 						style="border: #000000 1px solid;" />
 						
 			Monto $:
-			<h:inputText value="#{transaccionesBEAN.monto}" />
+			<h:inputText value="#{recargaBEAN.monto}" />
 			
 			<p:growl id="msg"/>
 			<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
-				Tipo de transaccion:
-        		<p:selectBooleanCheckbox value="#{transaccionesBEAN.check1}" itemLabel="Retiro">
-        		</p:selectBooleanCheckbox>
-        		<p:selectBooleanCheckbox value="#{transaccionesBEAN.check2}" itemLabel="Deposito">
+				:
+        		<p:selectBooleanCheckbox value="#{recargaBEAN.check1}" itemLabel="Recargar">
         		</p:selectBooleanCheckbox>
         	
     		</h:panelGrid>
 			
 		</h:panelGrid>
-		<h:commandButton value="CONTINUAR" action="#{transaccionesBEAN.retiro()}" style="padding:10px; width:200px;"/>
+		<h:commandButton value="CONTINUAR" action="#{recargaBEAN.retiro()}" style="padding:10px; width:200px;"/>
 	</h:form>
 </div>
 </body>
